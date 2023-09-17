@@ -2,21 +2,8 @@ from django.db import models
 from django.urls import reverse
 
 
-'''
-Category
-=========
-title, slug
-
-Tag
-=========
-title, slug
-
-Post
-=========
-title, slug, author, content, created_at, photo, views, category, tags
-'''
-
 class Category(models.Model):
+    """Модель категории"""
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, verbose_name='Url', unique=True)
 
@@ -31,7 +18,9 @@ class Category(models.Model):
         verbose_name_plural = 'Категории'
         ordering = ['title']
 
+
 class Tag(models.Model):
+    """Модель для тэгов"""
     title = models.CharField(max_length=50)
     slug = models.SlugField(max_length=255, verbose_name='Url', unique=True)
 
@@ -46,7 +35,9 @@ class Tag(models.Model):
         verbose_name_plural = 'Теги'
         ordering = ['title']
 
+
 class Post(models.Model):
+    """Модель поста"""
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, verbose_name='Url', unique=True)
     author = models.CharField(max_length=100)
@@ -60,10 +51,8 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-
     def get_absolute_url(self):
         return reverse('post', kwargs={"slug": self.slug})
-
 
     class Meta:
         ordering = ['-created_at']

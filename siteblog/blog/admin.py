@@ -5,7 +5,9 @@ from django.utils.safestring import mark_safe
 
 from .models import *
 
+
 class PostAdminForm(forms.ModelForm):
+    """Подключили ckeditor"""
     content = forms.CharField(widget=CKEditorUploadingWidget())
 
     class Meta:
@@ -14,6 +16,7 @@ class PostAdminForm(forms.ModelForm):
 
 
 class PostAdmin(admin.ModelAdmin):
+    """Пост в админ"""
     prepopulated_fields = {"slug": ("title",)}
     form = PostAdminForm
     save_as = True
@@ -25,7 +28,6 @@ class PostAdmin(admin.ModelAdmin):
     readonly_fields = ('views', 'created_at', 'get_photo')
     fields = ('title', 'slug','author', 'category', 'tags', 'content', 'photo','get_photo', 'views', 'created_at')
 
-
     def get_photo(self, obj):
         if obj.photo:
             return mark_safe(f'<img src="{obj.photo.url}" width="50">')
@@ -33,14 +35,17 @@ class PostAdmin(admin.ModelAdmin):
 
     get_photo.short_description = 'фото'
 
+
 class CategoryAdmin(admin.ModelAdmin):
+    """Автозаполнение слага в категориях админ"""
     prepopulated_fields = {"slug": ("title",)}
 
+
 class TagAdmin(admin.ModelAdmin):
-        prepopulated_fields = {"slug": ("title",)}
+    """Автозаполнение слага в тэгах админ"""
+    prepopulated_fields = {"slug": ("title",)}
 
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Post, PostAdmin)
-
